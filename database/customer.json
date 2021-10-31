@@ -1,0 +1,138 @@
+[
+    {
+        "id": 1,
+        "first_name": "Gayleen",
+        "last_name": "Buard",
+        "email": "gbuard0@nasa.gov",
+        "gender": "Bigender",
+        "ip_address": "121.28.59.161",
+        "address": "7 American Avenue",
+        "amount": "$1961.02",
+        "date": "6/8/2021"
+    },
+    {
+        "id": 2,
+        "first_name": "Gothart",
+        "last_name": "Sumption",
+        "email": "gsumption1@nymag.com",
+        "gender": "Non-binary",
+        "ip_address": "228.81.67.183",
+        "address": "43436 Northland Lane",
+        "amount": "$4863.56",
+        "date": "11/12/2020"
+    },
+    {
+        "id": 3,
+        "first_name": "Robbie",
+        "last_name": "Layson",
+        "email": "rlayson2@naver.com",
+        "gender": "Male",
+        "ip_address": "153.211.121.45",
+        "address": "850 Ilene Avenue",
+        "amount": "$4581.88",
+        "date": "10/30/2021"
+    },
+    {
+        "id": 4,
+        "first_name": "Pancho",
+        "last_name": "Burdas",
+        "email": "pburdas3@dagondesign.com",
+        "gender": "Agender",
+        "ip_address": "71.157.211.130",
+        "address": "2 Jenifer Alley",
+        "amount": "$5398.83",
+        "date": "8/20/2021"
+    },
+    {
+        "id": 5,
+        "first_name": "Almeda",
+        "last_name": "Schoolcroft",
+        "email": "aschoolcroft4@msu.edu",
+        "gender": "Genderqueer",
+        "ip_address": "142.28.133.90",
+        "address": "6261 Mockingbird Alley",
+        "amount": "$3419.51",
+        "date": "1/11/2021"
+    },
+    {
+        "id": 6,
+        "first_name": "Ulrike",
+        "last_name": "Tather",
+        "email": "utather5@cargocollective.com",
+        "gender": "Non-binary",
+        "ip_address": "209.6.64.129",
+        "address": "66 Welch Pass",
+        "amount": "$1740.49",
+        "date": "1/31/2021"
+    },
+    {
+        "id": 7,
+        "first_name": "Kermit",
+        "last_name": "Labitt",
+        "email": "klabitt6@nature.com",
+        "gender": "Male",
+        "ip_address": "107.210.59.21",
+        "address": "58509 Reinke Trail",
+        "amount": "$9193.75",
+        "date": "3/25/2021"
+    },
+    {
+        "id": 8,
+        "first_name": "Quintina",
+        "last_name": "Ranson",
+        "email": "qranson7@ibm.com",
+        "gender": "Genderqueer",
+        "ip_address": "150.194.74.156",
+        "address": "237 Schiller Parkway",
+        "amount": "$1061.65",
+        "date": "7/30/2021"
+    },
+    {
+        "id": 9,
+        "first_name": "Krystal",
+        "last_name": "Linskill",
+        "email": "klinskill8@aol.com",
+        "gender": "Polygender",
+        "ip_address": "72.251.245.204",
+        "address": "2644 Melody Circle",
+        "amount": "$5946.39",
+        "date": "12/25/2020"
+    },
+    {
+        "id": 10,
+        "first_name": "Gasparo",
+        "last_name": "Bleibaum",
+        "email": "gbleibaum9@umn.edu",
+        "gender": "Genderfluid",
+        "ip_address": "229.196.11.28",
+        "address": "2 Emmet Trail",
+        "amount": "$1827.07",
+        "date": "3/27/2021"
+    },
+    {
+        "mode": "customer",
+        "firstName": "dhruvil",
+        "lastName": "talaviya",
+        "customerId": "dhruviltalaviya@1",
+        "mobileNumber": 9876543210,
+        "email": "xyz@gmail.com",
+        "address": "mongo db street near express js , codeWorld",
+        "GSTNumber": "12#244479-498193",
+        "date": "1/1/2021",
+        "dueAmount": 4000, // change while selling ,taking return,
+        "PaymentHistory": [
+            {
+                "billNumber":12,//optional
+                "paymentMod":"cheque/cash/other",
+                "amount":1200,
+                "date":"14/1/2021"
+            },
+            {
+                "billNumber":42,
+                "paymentMod":"cheque/cash/other",
+                "amount":2500,
+                "date":"16/1/2021"
+            }
+        ]
+    }
+]

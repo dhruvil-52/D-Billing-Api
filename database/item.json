@@ -1,0 +1,17 @@
+[
+    {
+        "mode": "item",
+        "itemName": "kasab",
+        "itemCode": "H1243",
+        "buyFrom": "pallu",
+        "billNumber": 6547,
+        "date": "1/1/2021",
+        "noOfPcs": 12,
+        "grossweight": 2.45,
+        "coneWieght": 0.25,
+        "netWeigth": 2.2,
+        "remainingWeight":2.45,//change every time whenever selling or taking return
+        "rate": 175,
+        "amount": 385
+    }
+]

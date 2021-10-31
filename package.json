@@ -1,0 +1,26 @@
+{
+  "name": "d-billing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhruvil-52/D-Billing-Api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dhruvil-52/D-Billing-Api/issues"
+  },
+  "homepage": "https://github.com/dhruvil-52/D-Billing-Api#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "convict": "^6.2.1",
+    "http": "0.0.1-security",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33"
+  }
+}

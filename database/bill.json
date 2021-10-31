@@ -1,0 +1,37 @@
+[
+    {
+        "customerName": "dhruvi shah",
+        "billNumber": 12,
+        "date": "22/1/2021",
+        "amount": 4000, // change all while selling ,take returning and change due in customer.json
+        "item": [
+            {
+                "type": "sell",
+                "itemName": "kasab",
+                "itemCode": "H2134",
+                "grossweight": 0.45,
+                "coneWieght": 0.20,
+                "netWeigth": 0.25, // change in item.json
+                "rate": 195
+            },
+            {
+                "type": "sell",
+                "itemName": "jari",
+                "itemCode": "j67",
+                "grossweight": 0.45,
+                "coneWieght": 0.20,
+                "netWeigth": 0.25,
+                "rate": 195
+            },
+            {
+                "type": "return",
+                "itemName": "kasab",
+                "itemCode": "H2134",
+                "grossweight": 0.15,
+                "coneWieght": 0.02,
+                "netWeigth": 0.13,
+                "rate": 195
+            }
+        ]
+    }
+]

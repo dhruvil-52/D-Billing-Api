@@ -1,7 +1,8 @@
 const constant = {
     key: {
         customer: "customer",
-        item: "item"
+        item: "item",
+        bill: "bill"
     },
     filePath: {
         customer: "./database/customer.json",

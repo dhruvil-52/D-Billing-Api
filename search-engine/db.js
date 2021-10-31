@@ -88,6 +88,19 @@ const searchData = (obj) => {
                         }
                     }
 
+                    // for bill
+                    if (obj.mode == constant.key.bill) {
+                        if (obj.billNumber) {
+                            result = result.filter(e => {
+                                if (e.billNumber == obj.billNumber) {
+                                    return true;
+                                }
+                            })
+                        } else {
+                            result = result;
+                        }
+                    }
+
                     resolve(JSON.stringify(result));
                 }
             })
@@ -111,7 +124,6 @@ const addData = (obj) => {
                         readDataArr = JSON.parse(readFileData);
                     }
                     readDataArr.push(obj);
-                    console.log("-->", readDataArr)
                     fs.writeFile(path, JSON.stringify(readDataArr), (error) => {
                         if (error) {
                             reject(error);

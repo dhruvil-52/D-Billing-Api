@@ -119,7 +119,7 @@
         "address": "mongo db street near express js , codeWorld",
         "GSTNumber": "12#244479-498193",
         "date": "1/1/2021",
-        "dueAmount": 4000, // change while selling ,taking return,
+        "dueAmount": 7000, // change while selling ,taking return,
         "PaymentHistory": [
             {
                 "billNumber":12,//optional

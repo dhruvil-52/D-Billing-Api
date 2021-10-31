@@ -22,14 +22,15 @@ let paymentObj = {
     endDate: '12/24/2021'
 }
 
-let itemObj={
-    itemName :'kasab',
-    itemCode:'H1243',//come from constant,
-    buyFrom:'pallu',
-    billNumber:6547,
+let itemObj = {
+    itemName: 'kasab',
+    itemCode: 'H1243',//come from constant,
+    buyFrom: 'pallu',
+    billNumber: 6547,
     startDate: '4/1/2021',
     endDate: '8/16/2021'
 }
+
 let addItemObj = {
     mode: 'item',
     itemName: 'kasab',
@@ -47,22 +48,17 @@ let addItemObj = {
     amount: 385
 }
 
-let RemoveItemObj = [{
+let RemoveItemObj = {
     mode:'item',
-    itemName: 'kasab',
-    itemCode: 'H1243',
-    grossweight: 0.200,
-    coneWieght: 0.050,
-    netWeigth: 0.150,
-},{
-    itemName: 'jari',
-    itemCode: 'H1243',
-    grossweight: 0.200,
-    coneWieght: 0.050,
-    netWeigth: 0.150,
+    itemCode: 'H1243'
 }
-]
 
+let removeCustomer={
+    customerId:'dhruviltalaviya@1',
+    name:'dhruvil talaviya'
+}
+
+//auto add
 let addCustomerObj = {
     mode: 'customer',
     firstName: 'dhruvil',
@@ -79,7 +75,8 @@ let addCustomerObj = {
 //for delete customer
 let removeCustomerObj = {
     mode: 'customer',
-    customerId: 'dhruviltalaviya@1'
+    customerId: 'dhruviltalaviya@1',
+    name:'dhruvil talaviya' //optional
 }
 
 // db.searchData(paymentObj).then((result) => {
@@ -89,8 +86,8 @@ let removeCustomerObj = {
 //     console.log(error);
 // })
 
-db.addData(addItemObj).then((result)=>{
+db.addData(addItemObj).then((result) => {
     console.log(result);
-},(error)=>{
+}, (error) => {
     console.log(error);
 })

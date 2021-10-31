@@ -63,4 +63,12 @@ service.removeCustomer = (data) => {
     })
 }
 
+service.getBill = (data) => {
+    data.mode = 'bill';
+    model.getDataFromDoc(data).then((resp) => {
+
+    }, (error) => {
+
+    })
+}
 module.exports = service;

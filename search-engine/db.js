@@ -123,7 +123,14 @@ const addData = (obj) => {
                     if (readFileData) {
                         readDataArr = JSON.parse(readFileData);
                     }
-                    readDataArr.push(obj);
+                    if (obj.editMode && obj.mode == constant.key.customer) {
+                        const removeIndex = readDataArr.findIndex(e => e.customerId == obj.customerId);
+                        // remove object
+                        readDataArr.splice(removeIndex, 1);
+                        readDataArr.push(obj);
+                    } else {
+                        readDataArr.push(obj);
+                    }
                     fs.writeFile(path, JSON.stringify(readDataArr), (error) => {
                         if (error) {
                             reject(error);

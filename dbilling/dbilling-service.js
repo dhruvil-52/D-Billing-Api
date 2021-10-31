@@ -71,4 +71,15 @@ service.getBill = (data) => {
 
     })
 }
+
+service.updateCustomer = () => {
+    data.mode = "customer";
+    data.editMode = "true";
+    model.addDataToDoc(data).then((resp) => {
+
+    }, (error) => {
+
+    })
+}
+
 module.exports = service;

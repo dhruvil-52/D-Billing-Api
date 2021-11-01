@@ -86,7 +86,7 @@ let removeCustomerObj = {
 //     console.log(error);
 // })
 
-db.addData(addItemObj).then((result) => {
+db.addData(addCustomerObj).then((result) => {
     console.log(result);
 }, (error) => {
     console.log(error);

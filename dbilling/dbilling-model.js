@@ -24,8 +24,19 @@ dbillingModel.removeDataFromDoc = (data) => {
     })
 }
 
+dbillingModel.makeBill = (data) => {
+    return new Promise((resolve, reject) => {
+        db.makeBill(data).then((result)=>{
+            resolve(result);
+        },(error)=>{
+            reject(error);
+        })
+    })
+}
+
 dbillingModel.getDataFromDoc = (data) => {
     return new Promise((resolve, reject) => {
+        console.log("data",data)
         db.searchData(data).then((result) => {
             resolve(result);
         }, (error) => {

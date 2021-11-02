@@ -5,7 +5,6 @@ const service = {
 }
 
 service.addItem = (req, res) => {
-    console.log("-->", req.body)
     req.body.mode = 'item'
     model.addDataToDoc(req.body).then((resp) => {
         res.status(200).send({
@@ -18,67 +17,96 @@ service.addItem = (req, res) => {
     })
 }
 
-service.getItem = (data) => {
-    data.mode = 'item';
-    model.getDataFromDoc(data).then((resp) => {
-
+service.getItem = (req, res) => {
+    req.body.mode = 'item'
+    console.log("req",req.body)
+    model.getDataFromDoc(req.body).then((resp) => {
+        res.status(200).send({
+            data: resp
+        })
     }, (error) => {
-
+        res.status(500).send({
+            data: error
+        })
     })
 }
 
-service.removeItem = (data) => {
-    data.mode = 'item';
-    model.removeDataFromDoc(data).then((resp) => {
-
+service.removeItem = (req, res) => {
+    req.body.mode = 'item'
+    model.removeDataFromDoc(req.body).then((resp) => {
+        res.status(200).send({
+            data: resp
+        })
     }, (error) => {
-
+        res.status(500).send({
+            data: error
+        })
     })
 }
 
-service.addCustomer = (data) => {
-    data.mode = 'customer';
-    model.getDataFromDoc(data).then((resp) => {
-
+service.makeBill = (req, res) => {
+    req.body.mode = 'bill';
+    model.makeBill(req.body).then((resp) => {
+        res.status(200).send({
+            data: resp
+        })
     }, (error) => {
-
+        res.status(500).send({
+            data: error
+        })
     })
 }
 
-service.getCustomer = (data) => {
-    data.mode = 'customer';
-    model.addDataToDoc(data).then((resp) => {
-
+service.getCustomer = (req, res) => {
+    req.body.mode = 'customer'
+    model.addDataToDoc(req.body).then((resp) => {
+        res.status(200).send({
+            data: resp
+        })
     }, (error) => {
-
+        res.status(500).send({
+            data: error
+        })
     })
 }
 
-service.removeCustomer = (data) => {
-    data.mode = 'customer';
-    model.removeDataFromDoc(data).then((resp) => {
-
+service.removeCustomer = (req, res) => {
+    req.body.mode = 'customer'
+    model.removeDataFromDoc(req.body).then((resp) => {
+        res.status(200).send({
+            data: resp
+        })
     }, (error) => {
-
+        res.status(500).send({
+            data: error
+        })
     })
 }
 
-service.getBill = (data) => {
-    data.mode = 'bill';
-    model.getDataFromDoc(data).then((resp) => {
-
+service.getBill = (req, res) => {
+    req.body.mode = 'bill'
+    model.getDataFromDoc(req.body).then((resp) => {
+        res.status(200).send({
+            data: resp
+        })
     }, (error) => {
-
+        res.status(500).send({
+            data: error
+        })
     })
 }
 
 service.updateCustomer = () => {
-    data.mode = "customer";
-    data.editMode = "true";
-    model.addDataToDoc(data).then((resp) => {
-
+    req.body.mode = "customer";
+    req.body.editMode = "true";
+    model.addDataToDoc(req.body).then((resp) => {
+        res.status(200).send({
+            data: resp
+        })
     }, (error) => {
-
+        res.status(500).send({
+            data: error
+        })
     })
 }
 

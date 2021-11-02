@@ -6,7 +6,8 @@ module.exports = (app) => {
     app.post('/removeItem', service.removeItem);
     app.post('/makeBill', service.makeBill);
     //-----------------never call----------------------------------------------
-    app.post('/addCustomer', service.addCustomer);// add customer data from bill req. 
+   // app.post('/addCustomer', service.addCustomer);// add customer data from bill req. 
+    
     app.post('/getCustomer', service.getCustomer);
     app.post('/removeCustomer', service.removeCustomer);
     app.post('/updateCustomer', service.updateCustomer);

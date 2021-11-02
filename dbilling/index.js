@@ -12,4 +12,5 @@ module.exports = (app) => {
     app.post('/removeCustomer', service.removeCustomer);
     app.post('/updateCustomer', service.updateCustomer);
     app.post('/getBill', service.getBill);
+    app.post('/returnAllItems',service.returnAllItems);
 }

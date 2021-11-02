@@ -96,10 +96,23 @@ service.getBill = (req, res) => {
     })
 }
 
-service.updateCustomer = () => {
+service.updateCustomer = (req,res) => {
     req.body.mode = "customer";
     req.body.editMode = "true";
     model.addDataToDoc(req.body).then((resp) => {
+        res.status(200).send({
+            data: resp
+        })
+    }, (error) => {
+        res.status(500).send({
+            data: error
+        })
+    })
+}
+
+service.returnAllItems=(req,res)=>{
+    req.body.mode = "bill";
+    model.returnAllItems(req.body).then((resp) => {
         res.status(200).send({
             data: resp
         })

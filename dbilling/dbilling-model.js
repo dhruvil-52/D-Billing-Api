@@ -36,8 +36,17 @@ dbillingModel.makeBill = (data) => {
 
 dbillingModel.getDataFromDoc = (data) => {
     return new Promise((resolve, reject) => {
-        console.log("data",data)
         db.searchData(data).then((result) => {
+            resolve(result);
+        }, (error) => {
+            reject(error);
+        })
+    })
+}
+
+dbillingModel.returnAllItems=(data)=>{
+    return new Promise((resolve, reject) => {
+        db.returnAllItems(data).then((result) => {
             resolve(result);
         }, (error) => {
             reject(error);

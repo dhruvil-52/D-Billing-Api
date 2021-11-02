@@ -135,9 +135,16 @@ const addData = (obj) => {
 
                         if (obj.editMode && obj.mode == constant.key.customer) {
                             const removeIndex = readDataArr.findIndex(e => e.customerId == obj.customerId);
-                            // remove object
-                            readDataArr.splice(removeIndex, 1);
-                            readDataArr.push(obj);
+                            //just change those field which user want to change,other info will be conside old.
+                            readDataArr[removeIndex].firstName = obj.firstName ? obj : readDataArr[removeIndex].firstName;
+                            readDataArr[removeIndex].lastName = obj.lastName ? obj : readDataArr[removeIndex].lastName;
+                            readDataArr[removeIndex].mobileNumber = obj.mobileNumber ? obj : readDataArr[removeIndex].mobileNumber;
+                            readDataArr[removeIndex].email = obj.email ? obj : readDataArr[removeIndex].email;
+                            readDataArr[removeIndex].address = obj.address ? obj : readDataArr[removeIndex].address;
+                            readDataArr[removeIndex].GSTNumber = obj.GSTNumber ? obj : readDataArr[removeIndex].GSTNumber;
+                            readDataArr[removeIndex].customerId = obj.customerId ? obj : readDataArr[removeIndex].customerId;
+                            readDataArr[removeIndex].date = obj.date ? obj : readDataArr[removeIndex].date;
+                            readDataArr[removeIndex].dueAmount = obj.dueAmount ? obj : readDataArr[removeIndex].dueAmount;
                         } else {
                             readDataArr.push(obj);
                         }
@@ -172,42 +179,52 @@ const makeBill = (obj) => {
                     }
                     const index = readDataArr.findIndex(item => item.billNumber === obj.billNumber);
                     let isReturnExist = obj.item.findIndex(item => item.type == "return");
+                    let needToUpdate = false;
+
                     if (isReturnExist < 0 && index >= 0) {
+                        // for sell we send error - bill already exist you can't enter same bill
                         reject("already bill exist");
                     }
+
                     if (index >= 0 && isReturnExist >= 0) {
                         if (obj.item && obj.item.length > 0) {
                             // for return we can edit bill
+                            needToUpdate = true;
                             if (isReturnExist >= 0) {
                                 let returnItemArr = obj.item.filter(i => {
-                                    console.log(i.type)
                                     if (i.type == "return") {
                                         return true;
                                     }
                                 });
                                 readDataArr[index].item = readDataArr[index].item.concat(returnItemArr);
                             }
-                            else {
-                                readDataArr.push(obj);
-                                // for sell we send error - bill already exist you can't enter same bill
-                            }
-                            addCustomerBaseonBill(obj).then((result) => {
-                                updateItemBasedOnBill(obj).then((resp) => {
-                                    //bill json write
-                                    fs.writeFile(path, JSON.stringify(readDataArr), (error) => {
-                                        if (error) {
-                                            reject(error);
-                                        } else {
-                                            resolve(true);
-                                        }
-                                    })
-                                }, (err) => {
-                                    reject(err);
+
+                        }
+                    }
+
+                    if (index < 0) {
+                        //if bill not exist then add bill
+                        readDataArr.push(obj);
+                        needToUpdate = true;
+                    }
+
+                    if (needToUpdate) {
+                        addCustomerBaseonBill(obj).then((result) => {
+                            updateItemBasedOnBill(obj).then((resp) => {
+                                //bill json write
+                                fs.writeFile(path, JSON.stringify(readDataArr), (error) => {
+                                    if (error) {
+                                        reject(error);
+                                    } else {
+                                        resolve(true);
+                                    }
                                 })
                             }, (err) => {
                                 reject(err);
                             })
-                        }
+                        }, (err) => {
+                            reject(err);
+                        })
                     }
                 }
             })
@@ -229,23 +246,17 @@ const addCustomerBaseonBill = (obj) => {
 
                     const index = readDataArr.findIndex(item => item.customerId === obj.customerId);
                     if (index >= 0) {
-                        if (customerObj.payAmount) {                       //cheque payment or cash payment
-                            let paymentObj = {
-                                billNumber: customerObj.billNumber,
-                                paymentMode: customerObj.paymentMode,
-                                paidAmount: customerObj.payAmount,
-                                date: customerObj.date
-                            }
-                            //try
-                            readDataArr[index].paymentHistory ? readDataArr[index].paymentHistory.push(paymentObj) : readDataArr[index].paymentHistory = [paymentObj]
-                            if (customerObj.item && customerObj.item.length > 0) {
-                                // if selling then add due in customer account ,for return item minus return bill amount from customer account
-                                console.log(customerObj.item[0].type, readDataArr[index].dueAmount, (customerObj.amount - customerObj.payAmount), customerObj.amount)
-                                readDataArr[index].dueAmount = customerObj.item[0].type == "sell" ? readDataArr[index].dueAmount + (customerObj.amount - customerObj.payAmount) : readDataArr[index].dueAmount - customerObj.amount;
-                            }
+                        let paymentObj = {
+                            billNumber: customerObj.billNumber,
+                            paymentMode: (customerObj.paymentMode ? customerObj.paymentMode : undefined),
+                            paidAmount: customerObj.payAmount,
+                            date: customerObj.date
                         }
-                        else {
-                            readDataArr[index].dueAmount = readDataArr[index].dueAmount + customerObj.amount;
+                        //try
+                        readDataArr[index].paymentHistory ? readDataArr[index].paymentHistory.push(paymentObj) : readDataArr[index].paymentHistory = [paymentObj]
+                        if (customerObj.item && customerObj.item.length > 0) {
+                            // if selling then add due in customer account ,for return item minus return bill amount from customer account
+                            readDataArr[index].dueAmount = customerObj.payAmount ? (customerObj.item[0].type == "sell" ? readDataArr[index].dueAmount + (customerObj.amount - customerObj.payAmount) : readDataArr[index].dueAmount - customerObj.amount) : (customerObj.item[0].type == "sell" ? readDataArr[index].dueAmount + customerObj.amount : readDataArr[index].dueAmount - customerObj.amount);
                         }
 
                     } else {
@@ -354,16 +365,21 @@ const updateItem = (itemObj) => {
                         if (index >= 0) {
                             console.log("index", currentItemObj.type, readDataArr[index].remainingWeight, currentItemObj.netWeight)
                             readDataArr[index].remainingWeight = currentItemObj.type == "sell" ? readDataArr[index].remainingWeight - currentItemObj.netWeight : readDataArr[index].remainingWeight + currentItemObj.netWeight;
-                            readDataArr[index].remainingWeight = parseFloat(readDataArr[index].remainingWeight).toFixed(2);
-                            console.log(readDataArr[index].remainingWeight)
-                            //readDataArr[index].remainingWeight=Math.round(readDataArr[index].remainingWeight)
-                            fs.writeFile(path, JSON.stringify(readDataArr), (error) => {
-                                if (error) {
-                                    reject(error);
-                                } else {
-                                    resolve(updateItem(itemObj));
-                                }
-                            })
+                            readDataArr[index].remainingWeight = Math.round(readDataArr[index].remainingWeight * 100) / 100
+                            if (readDataArr[index].remainingWeight < 0) {
+                                reject("remaining weight should not less than 0 kg.")
+                            } else if (readDataArr[index].remainingWeight > readDataArr[index].netWeight) {
+                                reject("remaining weight should not more than bought item's weight.")
+                            } else {
+                                //readDataArr[index].remainingWeight=Math.round(readDataArr[index].remainingWeight)
+                                fs.writeFile(path, JSON.stringify(readDataArr), (error) => {
+                                    if (error) {
+                                        reject(error);
+                                    } else {
+                                        resolve(updateItem(itemObj));
+                                    }
+                                })
+                            }
                         } else {
                             resolve(updateItem(itemObj));
                         }
@@ -383,27 +399,83 @@ const removeData = (obj) => {
             if (err) {
                 reject(err);
             } else {
-                let readDataArr = JSON.parse(readFileData);
-                let removeIndex;
-                if (obj.mode == "customer") {
-                    removeIndex = readDataArr.findIndex(item => item.customerId === obj.customerId);
-                }
-                if (obj.mode == "item") {
-                    removeIndex = readDataArr.findIndex(item => item.itemCode === obj.itemCode);
-                }
-                if (obj.mode == "bill") {
-                    removeIndex = readDataArr.findIndex(item => item.billNumber === obj.billNumber);
-                }
-                if (removeIndex > 0) {
-                    readDataArr.splice(removeIndex, 1);
-                }
-                fs.writeFile(path, JSON.stringify(readDataArr), (error) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(true);
+                let readDataArr = [];
+                if (readFileData) {
+                    readDataArr = JSON.parse(readFileData);
+                    let removeIndex;
+                    if (obj.mode == "customer") {
+                        removeIndex = readDataArr.findIndex(item => item.customerId === obj.customerId);
                     }
-                })
+                    if (obj.mode == "item") {
+                        removeIndex = readDataArr.findIndex(item => item.itemCode === obj.itemCode);
+                    }
+                    if (obj.mode == "bill") {
+                        removeIndex = readDataArr.findIndex(item => item.billNumber === obj.billNumber);
+                    }
+                    if (removeIndex > 0) {
+                        readDataArr.splice(removeIndex, 1);
+                    }
+                    fs.writeFile(path, JSON.stringify(readDataArr), (error) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    })
+                }
+                else {
+                    reject("data not available");
+                }
+            }
+        })
+    })
+}
+
+const returnAllItems = (obj) => {
+    return new Promise((resolve, reject) => {
+        let path = './database/' + constant.key[obj.mode] + '.json';
+        fs.readFile(path, 'utf-8', (err, readFileData) => {
+            if (err) {
+                reject(err);
+            } else {
+                let readDataArr = [];
+                if (readFileData) {
+                    readDataArr = JSON.parse(readFileData);
+                    console.log("--------------->", readDataArr, obj.billNumber)
+                    let removeIndex = readDataArr.findIndex(item => item.billNumber === obj.billNumber);
+                    if (removeIndex >= 0) {
+                        //find which item is sold on that bill  and make it return it and send it to make bill
+                        //make bill function consider it return items and make changes according it
+                        let sellArry = readDataArr[removeIndex].item.map(p =>
+                            p.type === 'sell'
+                                ? { ...p, type: 'return' }
+                                : p
+                        );
+                        readDataArr[removeIndex].item = sellArry;
+                        console.log(readDataArr[removeIndex].item)
+
+                        //change in customer json and item json
+                        makeBill(readDataArr[removeIndex]).then((result) => {
+                            if (result) {
+                                //change in bill json
+                                readDataArr.splice(removeIndex, 1);
+                                fs.writeFile(path, JSON.stringify(readDataArr), (error) => {
+                                    if (error) {
+                                        reject(error);
+                                    } else {
+                                        resolve(true);
+                                    }
+                                })
+                            }
+                        }, (error) => {
+                            reject(error);
+                        })
+                    } else {
+                        reject("bill not available");
+                    }
+                } else {
+                    reject("bill data not available");
+                }
             }
         })
     })
@@ -414,5 +486,6 @@ module.exports = {
     addData: addData,
     removeData: removeData,
     makeBill: makeBill,
-    removeData: removeData
+    removeData: removeData,
+    returnAllItems: returnAllItems
 }

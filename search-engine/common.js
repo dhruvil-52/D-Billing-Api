@@ -61,22 +61,37 @@ const searchData = (obj) => {
                         }
                     }
 
-                    if (obj.mode == constant.key.item){
-                        itemName :'kasab',
-    itemCode:'H1243',//come from constant,
-    buyFrom:'pallu',
-    billNumber:6547,
-                        if(obj.itemName){
-
+                    if (obj.mode == constant.key.item) {
+                        if (obj.itemName) {
+                            result = result.filter(e => {
+                                if (e.itemName == obj.itemName) {
+                                    return true;
+                                }
+                            })
                         }
-                        if(obj.buyFrom){
-
+                        if (obj.buyFrom) {
+                            result = result.filter(e => {
+                                if (e.buyFrom == obj.buyFrom) {
+                                    return true;
+                                }
+                            })
                         }
-                        if(obj.billNumber){
-                            
+                        if (obj.billNumber) {
+                            result = result.filter(e => {
+                                if (e.billNumber == obj.billNumber) {
+                                    return true;
+                                }
+                            })
+                        }
+                        if (obj.itemCode) {
+                            result = result.filter(e => {
+                                if (e.itemCode == obj.itemCode) {
+                                    return true;
+                                }
+                            })
                         }
                     }
-                        resolve(JSON.stringify(result));
+                    resolve(JSON.stringify(result));
                 }
             })
         } else {

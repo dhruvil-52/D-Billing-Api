@@ -53,9 +53,17 @@ const searchData = (obj) => {
 
                         //for customer filter
                         if (obj.mode == constant.key.customer) {
+                            delete obj.mode;
                             if (obj.name) {
                                 result = result.filter(e => {
-                                    if (e.first_name == obj.name) {
+                                    if (e.firstName.toLowerCase() == obj.name.toLowerCase()) {
+                                        return true;
+                                    }
+                                })
+                            }
+                            else if (obj.customerId) {
+                                result = result.filter(e => {
+                                    if (e.customerId == obj.customerId) {
                                         return true;
                                     }
                                 })
@@ -64,7 +72,9 @@ const searchData = (obj) => {
                             }
                         }
 
+                        // for item
                         if (obj.mode == constant.key.item) {
+                            delete obj.mode;
                             if (obj.itemCode) {
                                 result = result.filter(e => {
                                     if (e.itemCode == obj.itemCode) {
@@ -74,7 +84,7 @@ const searchData = (obj) => {
                             }
                             if (obj.itemName) {
                                 result = result.filter(e => {
-                                    if (e.itemName == obj.itemName) {
+                                    if (e.itemName.toLowerCase() == obj.itemName.toLowerCase()) {
                                         return true;
                                     }
                                 })
@@ -97,6 +107,7 @@ const searchData = (obj) => {
 
                         // for bill
                         if (obj.mode == constant.key.bill) {
+                            delete obj.mode;
                             if (obj.billNumber) {
                                 result = result.filter(e => {
                                     if (e.billNumber == obj.billNumber) {
@@ -106,6 +117,10 @@ const searchData = (obj) => {
                             } else {
                                 result = result;
                             }
+                        }
+
+                        if (obj.mode == constant.key.profile) {
+                            result = result;
                         }
 
                         resolve(result);
@@ -120,6 +135,7 @@ const searchData = (obj) => {
     })
 }
 
+// add customer ,edit customer ,add items
 const addData = (obj) => {
     return new Promise((resolve, reject) => {
         // for checking key's entry in constant file
@@ -132,33 +148,49 @@ const addData = (obj) => {
                     let readDataArr = [];
                     if (readFileData) {
                         readDataArr = JSON.parse(readFileData);
-
-                        if (obj.editMode && obj.mode == constant.key.customer) {
-                            const removeIndex = readDataArr.findIndex(e => e.customerId == obj.customerId);
-                            //just change those field which user want to change,other info will be conside old.
-                            readDataArr[removeIndex].firstName = obj.firstName ? obj : readDataArr[removeIndex].firstName;
-                            readDataArr[removeIndex].lastName = obj.lastName ? obj : readDataArr[removeIndex].lastName;
-                            readDataArr[removeIndex].mobileNumber = obj.mobileNumber ? obj : readDataArr[removeIndex].mobileNumber;
-                            readDataArr[removeIndex].email = obj.email ? obj : readDataArr[removeIndex].email;
-                            readDataArr[removeIndex].address = obj.address ? obj : readDataArr[removeIndex].address;
-                            readDataArr[removeIndex].GSTNumber = obj.GSTNumber ? obj : readDataArr[removeIndex].GSTNumber;
-                            readDataArr[removeIndex].customerId = obj.customerId ? obj : readDataArr[removeIndex].customerId;
-                            readDataArr[removeIndex].date = obj.date ? obj : readDataArr[removeIndex].date;
-                            readDataArr[removeIndex].dueAmount = obj.dueAmount ? obj : readDataArr[removeIndex].dueAmount;
-                        } else {
+                        //for add edit customer profile
+                        if (obj.mode == constant.key.customer) {
+                            delete obj.mode;
+                            if (obj.editMode) {
+                                const removeIndex = readDataArr.findIndex(e => e.customerId == obj.customerId);
+                                //just change those field which user want to change,other info will be conside old.
+                                readDataArr[removeIndex].firstName = obj.firstName ? obj.firstName : readDataArr[removeIndex].firstName;
+                                readDataArr[removeIndex].lastName = obj.lastName ? obj.lastName : readDataArr[removeIndex].lastName;
+                                readDataArr[removeIndex].mobileNumber = obj.mobileNumber ? obj.mobileNumber : readDataArr[removeIndex].mobileNumber;
+                                readDataArr[removeIndex].email = obj.email ? obj.email : readDataArr[removeIndex].email;
+                                readDataArr[removeIndex].address = obj.address ? obj.address : readDataArr[removeIndex].address;
+                                readDataArr[removeIndex].GSTNumber = obj.GSTNumber ? obj.GSTNumber : readDataArr[removeIndex].GSTNumber;
+                                readDataArr[removeIndex].customerId = obj.customerId ? obj.customerId : readDataArr[removeIndex].customerId;
+                                readDataArr[removeIndex].date = obj.date ? obj.date : readDataArr[removeIndex].date;
+                                readDataArr[removeIndex].dueAmount = obj.dueAmount ? obj.dueAmount : readDataArr[removeIndex].dueAmount;
+                            } else {
+                                readDataArr.push(obj);
+                            }
+                        }
+                        // for add item
+                        else if (obj.mode == constant.key.item) {
+                            delete obj.mode;
+                            obj.remainingWeight = obj.netWeight; // at initial stage netWeight and remainingWeight both are equals
                             readDataArr.push(obj);
                         }
-                    } else {
-                        obj.remainingWeight = obj.netWeight; // at initial stage netWeight and remainingWeight both are equals
-                        readDataArr.push(obj);
-                    }
-                    fs.writeFile(path, JSON.stringify(readDataArr), (error) => {
-                        if (error) {
-                            reject(error);
-                        } else {
-                            resolve(true);
+                        // for add edit my profile
+                        else if (obj.mode == constant.key.profile) {
+                            delete obj.mode;
+                            if (obj.editMode) {
+                                delete obj.editMode;
+                                readDataArr[0] = obj;
+                            } else {
+                                readDataArr.push(obj);
+                            }
                         }
-                    })
+                        fs.writeFile(path, JSON.stringify(readDataArr), (error) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                                resolve(true);
+                            }
+                        })
+                    }
                 }
             })
         }
@@ -250,6 +282,7 @@ const addCustomerBaseonBill = (obj) => {
                             billNumber: customerObj.billNumber,
                             paymentMode: (customerObj.paymentMode ? customerObj.paymentMode : undefined),
                             paidAmount: customerObj.payAmount,
+                            dueAmount: customerObj.amount - (customerObj.payAmount ? customerObj.payAmount : 0),
                             date: customerObj.date
                         }
                         //try
@@ -363,7 +396,6 @@ const updateItem = (itemObj) => {
                         readDataArr = JSON.parse(readFileData);
                         let index = readDataArr.findIndex(item => item.itemCode === currentItemObj.itemCode);
                         if (index >= 0) {
-                            console.log("index", currentItemObj.type, readDataArr[index].remainingWeight, currentItemObj.netWeight)
                             readDataArr[index].remainingWeight = currentItemObj.type == "sell" ? readDataArr[index].remainingWeight - currentItemObj.netWeight : readDataArr[index].remainingWeight + currentItemObj.netWeight;
                             readDataArr[index].remainingWeight = Math.round(readDataArr[index].remainingWeight * 100) / 100
                             if (readDataArr[index].remainingWeight < 0) {
@@ -441,7 +473,6 @@ const returnAllItems = (obj) => {
                 let readDataArr = [];
                 if (readFileData) {
                     readDataArr = JSON.parse(readFileData);
-                    console.log("--------------->", readDataArr, obj.billNumber)
                     let removeIndex = readDataArr.findIndex(item => item.billNumber === obj.billNumber);
                     if (removeIndex >= 0) {
                         //find which item is sold on that bill  and make it return it and send it to make bill
@@ -452,7 +483,6 @@ const returnAllItems = (obj) => {
                                 : p
                         );
                         readDataArr[removeIndex].item = sellArry;
-                        console.log(readDataArr[removeIndex].item)
 
                         //change in customer json and item json
                         makeBill(readDataArr[removeIndex]).then((result) => {

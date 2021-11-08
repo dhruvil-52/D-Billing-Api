@@ -19,7 +19,7 @@ service.addItem = (req, res) => {
 
 service.getItem = (req, res) => {
     req.body.mode = 'item'
-    console.log("req",req.body)
+    console.log("req", req.body)
     model.getDataFromDoc(req.body).then((resp) => {
         res.status(200).send({
             data: resp
@@ -59,6 +59,19 @@ service.makeBill = (req, res) => {
 
 service.getCustomer = (req, res) => {
     req.body.mode = 'customer'
+    model.getDataFromDoc(req.body).then((resp) => {
+        res.status(200).send({
+            data: resp
+        })
+    }, (error) => {
+        res.status(500).send({
+            data: error
+        })
+    })
+}
+
+service.addCustomer = (req, res) => {
+    req.body.mode = "customer";
     model.addDataToDoc(req.body).then((resp) => {
         res.status(200).send({
             data: resp
@@ -96,7 +109,7 @@ service.getBill = (req, res) => {
     })
 }
 
-service.updateCustomer = (req,res) => {
+service.updateCustomer = (req, res) => {
     req.body.mode = "customer";
     req.body.editMode = "true";
     model.addDataToDoc(req.body).then((resp) => {
@@ -110,9 +123,36 @@ service.updateCustomer = (req,res) => {
     })
 }
 
-service.returnAllItems=(req,res)=>{
+service.returnAllItems = (req, res) => {
     req.body.mode = "bill";
     model.returnAllItems(req.body).then((resp) => {
+        res.status(200).send({
+            data: resp
+        })
+    }, (error) => {
+        res.status(500).send({
+            data: error
+        })
+    })
+}
+
+service.getMyProfile = (req, res) => {
+    req.body.mode = "profile";
+    model.getDataFromDoc(req.body).then((resp) => {
+        res.status(200).send({
+            data: resp
+        })
+    }, (error) => {
+        res.status(500).send({
+            data: error
+        })
+    })
+}
+
+service.editMyProfile = (req, res) => {
+    req.body.mode = "profile";
+    req.body.editMode = "true";
+    model.addDataToDoc(req.body).then((resp) => {
         res.status(200).send({
             data: resp
         })

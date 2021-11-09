@@ -41,8 +41,8 @@ let addItemObj = {
     billNumber: 6547,
     date: '1/1/2021',
     noOfPcs: 12,
-    grossweight: 2.450,
-    coneWieght: 0.250,
+    grossWeight: 2.450,
+    coneWeight: 0.250,
     netWeigth: 2.200,
     rate: 175,
     amount: 385

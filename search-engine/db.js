@@ -91,7 +91,7 @@ const searchData = (obj) => {
                             }
                             if (obj.buyFrom) {
                                 result = result.filter(e => {
-                                    if (e.buyFrom == obj.buyFrom) {
+                                    if (e.buyFrom.toLowerCase() == obj.buyFrom.toLowerCase()) {
                                         return true;
                                     }
                                 })

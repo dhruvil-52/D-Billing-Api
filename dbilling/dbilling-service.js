@@ -19,7 +19,6 @@ service.addItem = (req, res) => {
 
 service.getItem = (req, res) => {
     req.body.mode = 'item'
-    console.log("req", req.body)
     model.getDataFromDoc(req.body).then((resp) => {
         res.status(200).send({
             data: resp
